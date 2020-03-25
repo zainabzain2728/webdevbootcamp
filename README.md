@@ -1,2 +1,0 @@
-# webdevbootcamp
-Created with CodeSandbox
