@@ -1,6 +1,6 @@
 var faker = require("faker");
 
-console.log("faker app product");
+console.log("faker app productlist");
 for (var i = 0; i < 10; i++) {
   var name = faker.commerce.productName();
   var price = faker.commerce.price();
