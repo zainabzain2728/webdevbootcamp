@@ -1,0 +1,15 @@
+<%- include ("partials/header") %>
+<h1>the postspage</h1>
+<% for( var i = 0; i < posts.length; i++){ %>
+  <li>
+    <%= posts[i].title %> - <strong><%= posts[i].auther %></strong>
+  </li>
+<% } %>
+
+
+<% posts.forEach(function(post){ %>
+  <li>
+  <%= post.title %> - <strong><%= post.auther %></strong>
+  </li>
+<% }) %>
+<%- include ("partials/footer") %>
