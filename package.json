@@ -13,7 +13,7 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "knock-knock-jokes": "^1.7.0",
-    "request": "^2.88.2"
+    "mongodb": "^3.5.5"
   },
   "devDependencies": {
     "nodemon": "1.18.4"
