@@ -1,6 +1,22 @@
 var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
+mongoose
+  .connect(
+    "mongodb+srv://zainab:Zainizain%402728@cluster0-kdtti.mongodb.net/test?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useUnifiedTopology: true
+    }
+  )
+  .then(() => {
+    console.log("connected to DB!!");
+  })
+  .catch(err => {
+    console.log("error:", err.message);
+  });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
