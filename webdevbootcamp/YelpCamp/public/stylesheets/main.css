@@ -1,0 +1,15 @@
+body{
+	background: purple;
+}
+.row{
+	margin-top:10px;
+}
+.img-thumbnail img{
+	width:100%;
+}
+.img-thumbnail{
+	padding:0;
+}
+.img-thumbnail .caption{
+	padding: 9px;	
+}
