@@ -1,5 +1,5 @@
 <%- include ("../partials/header") %>
-<div class="container">
+
     <header class="jumbotron">
       <div class="container">
         <h1>Welcome To YelpCamp</h1>
@@ -11,10 +11,23 @@
     </header>
 
     <div class="row text-center" style="display:flex; flex-wrap:wrap;">
+		<div class="col-md-12">
+             <% if(noMatch !== null) { %>
+             <h3><%= noMatch %></h3>
+             <p>
+            	<form action="/campgrounds" method="GET" class="form-inline">
+            		<div class="form-group">
+            			<input type="text" name="search" placeholder="Campground search..." class="form-control">
+            			<input type="submit" value="Search" class="btn btn-default">
+            		</div>
+            	</form>
+			</p>
+             <% } %>
+         </div>
         <% campgrounds.forEach(function(campground){ %>
           <div class="col-md-3 col-sm-6">
             <div class="img-thumbnail">
-                <img src="<%= campground.image %>" style="width:100%;">
+                <img class="img-height" src="<%= campground.image %>" style="width:100%;">
                 <div class="caption">
                   <h4><%= campground.name %></h4>
                 </div>
@@ -26,4 +39,3 @@
         <% }); %>
     </div>
     <%- include ("../partials/footer") %>
-</div>
