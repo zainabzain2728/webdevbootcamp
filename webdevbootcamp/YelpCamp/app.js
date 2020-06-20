@@ -1,10 +1,20 @@
-var express 	= require("express"),
- 	app 		= express(),
- 	bodyParser 	= require("body-parser"),
- 	mongoose 	= require("mongoose"),
-	Campground 	= require("./models/campground"),
-	Comment		= require("./models/comment"),
-	seedDB		= require("./seeds")
+var express 		= require("express"),
+ 	app 			= express(),
+ 	bodyParser 		= require("body-parser"),
+ 	mongoose 		= require("mongoose"),
+	flash			= require("connect-flash"),
+	passport		= require("passport"),
+	LocalStrategy	= require("passport-local"),
+	methodOverride	= require("method-override"),
+	Campground 		= require("./models/campground"),
+	Comment			= require("./models/comment"),
+	User			= require("./models/user"),
+	seedDB			= require("./seeds")
+
+//require routes
+var	commentRoutes 	 = require("./routes/comments"),
+	campgroundRoutes = require("./routes/campgrounds"),
+	indexRoutes		 = require("./routes/index")
 
 
 mongoose.connect(("mongodb://localhost/yelp_camp"),{
@@ -15,100 +25,34 @@ mongoose.connect(("mongodb://localhost/yelp_camp"),{
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-seedDB();
+app.use(methodOverride("_method"));
+app.use(flash());
+app.locals.moment = require("moment");
+// seedDB(); //seed the datadbase
 
-app.get("/", function(req, res) {
-  res.render("landing");
+// PASSPORT CONFIGURATION
+app.use(require("express-session")({
+	secret: "Roses are the best flower in the whole world",
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req, res,next){
+	res.locals.currentUser = req.user;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");
+	
+	next();
 });
 
-//Index- all campgrounda
-app.get("/campgrounds", function(req, res) {
-	//get all campgrounds from DB
-	Campground.find({},function(err, allCampgrounds){
-		if(err){
-			console.log(err);
-		} else{
-			res.render("campgrounds/index", { campgrounds: allCampgrounds });
-		}
-	});
-});
-
-//Create-  create new campgrounds
-app.post("/campgrounds", function(req, res) {
-  //get data from formandadd to the array
-  var name = req.body.name;
-  var image = req.body.image;
-	var desc = req.body.description;
-  var newCampground = { name: name, image: image, description: desc };
-  //craete a new campground and save in DB
-	Campground.create(newCampground, function(err, newlyCreated){
-		if(err){
-			console.log(err);
-		}else{
-			//redirect back to the campgrounds page
-  			res.redirect("/campgrounds");
-		}
-	});
-});
-
-//New- add new campground
-app.get("/campgrounds/new", function(req, res) {
-  res.render("campgrounds/new");
-});
-
-//Show- show info aboout one campgrounds
-app.get("/campgrounds/:id", function(req,res){
-	//find campground against Id
-	Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
-		if(err){
-			console.log(err);
-		} else{
-			//show the description
-			res.render("campgrounds/show", {campground: foundCampground});
-		}
-	});
-});
-
-
-//	======================
-//	COMMENTS ROUTES
-//	======================
-
-app.get("/campgrounds/:id/comments/new", function(req, res){
-	//find campground by id
-	Campground.findById(req.params.id, function(err, campground){
-		if(err){
-			console.log(err)
-		} else {
-			res.render("comments/new", {campground: campground});	
-		}
-	});
-});
-
-app.post("/campgrounds/:id/comments", function(req, res){
-	//lookup campground using id
-	Campground.findById(req.params.id, function(err, campground){
-		if(err){
-			console.log(err);
-			res.redirect("/campgrounds");
-		}else{
-			//create new comments
-			Comment.create(req.body.comment, function(err, comment){
-				if(err){
-					console.log(err);
-				} else{
-					//connect new commnet to campground
-					campground.comments.push(comment);
-					campground.save();
-					//redirect campground show page
-					res.redirect('/campgrounds/' + campground._id);
-				}
-			});
-		}
-	});
-});
-
-
+app.use("/", indexRoutes);
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
 
 app.listen(process.env.PORT || 3001, process.env.IP, function() {
   console.log("yelp camp server start");

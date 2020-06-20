@@ -1,5 +1,4 @@
 <%- include ("../partials/header") %>
-<div class="container">
 	<div class="row">
 		<div class="col-md-3">
 			<p class="lead">YelpCamp</p>
@@ -8,14 +7,24 @@
 				<li class="list-group-item">Info 2</li>
 				<li class="list-group-item">Info 3</li>
 			</div>
+		
+			<div id='map'></div>
 		</div>
 		<div class="col-md-9">
 			<div class="img-thumbnail">
 				<img class="img-fluid" src="<%= campground.image %>">
 				<div class="caption">
-					<h4 class="float-right">$9.00/night</h4>
+					<h4 class="float-right">$ <%= campground.price %>/night</h4>
 					<h4><a href="#"><%= campground.name %></a></h4>
 					<p><%= campground.description %></p>
+					<p><em>Submitted by <a href="/users/<%= campground.author.id %>"><%= campground.author.username %></a>, 
+										<%= moment(campground.createdAt).fromNow() %></em></p>
+					<% if(currentUser && campground.author.id.equals(currentUser._id) || (currentUser && currentUser.isAdmin)){ %>
+						<a class= "btn btn-sm btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+						<form id="delete-form" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+							<button class="btn btn-sm btn-danger">Delete</button>
+						</form>
+					<% } %>
 				</div>
 			</div>
 			<div class="card bg-light">
@@ -28,18 +37,60 @@
 				<% campground.comments.forEach(function(comment){%>
 				<div class="row">
 					<div class="col-md-12">
-						<strong><%= comment.author %></strong>
-						<span class="float-right">10 days ago</span>
+						<strong><%= comment.author.username %></strong>
+						<span class="float-right"><%= moment(comment.createdAt).fromNow() %></span>
 						<p>
 							<%= comment.text %>  
 						</p>
+						<% if(currentUser && comment.author.id.equals(currentUser._id)|| (currentUser && currentUser.isAdmin)){ %>
+							<a class=" btn btn-sm btn-warning" 
+							   href="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>/edit">
+							   Edit
+							</a>
+							<form id="delete-form" 
+								  action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE" 		
+								  method="POST">
+								<input type="submit" class="btn btn-sm btn-danger" value="Delete">
+
+							</form>
+						<% } %>
 					</div>
 				</div>
 				<% }) %>
 			</div>
 		</div>
 	</div>
-</div>
 
+<script>
+L.mapbox.accessToken = 'pk.eyJ1IjoiemFpbmFiemFpbiIsImEiOiJja2JndzJsOTYwcTA5MnFrY290eTEzMmN5In0.CofHaAp5gb47NX_PkLZbdg';
+var geocoder = L.mapbox.geocoder('mapbox.places');
+
+var map = L.mapbox.map('map')
+    .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'))
+	.addControl(L.mapbox.geocoderControl('mapbox.places', {
+      autocomplete: true
+  }));
+
+geocoder.query('<%= campground.location %>', showMap);
+
+function showMap(err, data) {
+    // The geocoder can return an area, like a city, or a
+    // point, like an address. Here we handle both cases,
+    // by fitting the map bounds to an area or zooming to a point.
+    if (data.lbounds) {
+        map.fitBounds(data.lbounds);
+    } else if (data.latlng) {
+        map.setView([data.latlng[0], data.latlng[1]], 13);
+		
+	}
+	L.marker('<%= campground.location %>', {
+    icon: L.mapbox.marker.icon({
+        'marker-size': 'large',
+        'marker-symbol': 'marker',
+        'marker-color': '#3bb2d0'
+    })
+}).addTo(map);
+};
 	
+</script>
 <%- include ("../partials/footer") %>
