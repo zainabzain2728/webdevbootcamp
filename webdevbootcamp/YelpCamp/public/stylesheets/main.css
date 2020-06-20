@@ -1,15 +1,33 @@
 body{
-	background: purple;
+	background: #ffff;
 }
 .row{
 	margin-top:10px;
 }
+.jumbotron{
+	margin-top:2%;
+}
 .img-thumbnail img{
 	width:100%;
 }
+.img-height{
+	height:300px;
+}
 .img-thumbnail{
 	padding:0;
+	margin-bottom:5%;
 }
 .img-thumbnail .caption{
 	padding: 9px;	
+}
+#delete-form{
+	display: inline;
+}
+.login-singup-content{
+	width:400px; 
+}
+/* Google Maps */
+#map {
+    height: 400px;
+    width: 100%;
 }
