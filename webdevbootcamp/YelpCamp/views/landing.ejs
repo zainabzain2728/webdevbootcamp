@@ -1,9 +1,10 @@
-<!-- <%- include ("partials/header") %> -->
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>YelpCamp</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+			<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css">
         <link rel="stylesheet" href="/stylesheets/landing.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
     </head>
@@ -20,14 +21,15 @@
                 <%= success %>
             </div>
         <% } %>
-    
+
     <div id="landing-header">
- 		<h1>Welcome to YelpCamp!</h1>
+		<i class="fas fa-campground"></i>
+		<h1>Welcome to YelpCamp!</h1>
 		<a href="/campgrounds" class="btn btn-lg btn-success">View All Campgrounds</a>
 		<p>
            <form action="/campgrounds" method="GET" class="form-inline">
-               <div class="form-group">
-                   <input type="text" name="search" placeholder="Campground search..." class="form-control">
+               <div class="form-group container login-singup-content">
+                   <input class="form-control" type="text" name="search" placeholder="Campground search..." class="form-control">
                    <input type="submit" value="Search" class="btn btn-default">
                </div>
            </form>
@@ -41,5 +43,3 @@
       <li></li>
       <li></li>
     </ul>
-
-<%- include ("partials/footer") %>

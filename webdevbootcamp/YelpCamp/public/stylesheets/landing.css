@@ -1,6 +1,12 @@
 body {
   background-color: #000;
 }
+i{
+	font-size:60px; 
+	color: white;
+	position:relative;
+	z-index:1;
+}
 #landing-header {
   z-index: 1;
   position: relative;
@@ -11,7 +17,9 @@ body {
 #landing-header h1 {
   color: #fff;
 }
-
+.login-singup-content{
+	width:400px; 
+}
 .slideshow { 
   position: fixed;
   width: 100%;
