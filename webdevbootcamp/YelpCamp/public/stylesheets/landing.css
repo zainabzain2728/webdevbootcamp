@@ -11,7 +11,7 @@ i{
   z-index: 1;
   position: relative;
   text-align: center;
-  padding-top: 40vh;
+  padding-top: 25vh;
 }
 
 #landing-header h1 {
@@ -64,6 +64,28 @@ i{
 .slideshow li:nth-child(5) { 
   background-image: url(http://i.imgur.com/TVGe0Ef.jpg);
   animation-delay: 40s; 
+}
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.container .text-muted {
+  margin: 20px 0;
 }
 
 @keyframes imageAnimation { 
